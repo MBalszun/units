@@ -160,7 +160,8 @@ constexpr bool canTakeSqrt(Unit<k, m, s>) {
 
 //c++14: constexpr auto sqrt(Unit<k, m, s> l) -> std::enable_if_t < canTakeSqrt(Unit<k, m, s>{}), Unit < (k / 2), (m / 2), (s / 2) >> ::type{
 template<int k, int m, int s>
-constexpr auto sqrt(Unit<k, m, s> l)->std::enable_if_t < canTakeSqrt(Unit<k, m, s>{}), Unit < (k / 2), (m / 2), (s / 2) >> {
+constexpr auto sqrt(Unit<k, m, s> l) -> Unit < (k / 2), (m / 2), (s / 2) > {
+	static_assert(canTakeSqrt(Unit<k, m, s>{}), "Base units are not a power of 2");
 	return Unit < (k / 2), (m / 2), (s / 2) >(std::sqrt(l.value));
 }
 
