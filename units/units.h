@@ -222,10 +222,10 @@ constexpr UAngle pi = static_cast<UAngle>((double)_detail_angle::pi_internal);
 constexpr UAngle normNegPiPi(UAngle angle) {
 	return UAngle{ _detail_angle::normNegPiPi(angle.value) };
 }
+
 constexpr UAngle normNeg2Pi2Pi(UAngle angle) {
 	return UAngle{ _detail_angle::normNeg2Pi2Pi(angle.value) };
 }
-
 
 constexpr auto operator*(UAngle l, double r) { return UAngle{ l.value*r }; }
 constexpr auto operator*(double l, UAngle r) { return UAngle{ l*r.value }; }
@@ -246,8 +246,6 @@ constexpr bool operator!=(UAngle l, UAngle r) { return l.value != r.value; }
 constexpr bool operator<=(UAngle l, UAngle r) { return l.value <= r.value; }
 constexpr bool operator>=(UAngle l, UAngle r) { return l.value >= r.value; }
 
-
-
 inline auto abs(UAngle l) {
 	return UAngle(std::abs(l.value));
 }
@@ -260,7 +258,7 @@ inline auto sin(UAngle l) {
 	return std::sin(l.value);
 }
 
-UAngle atan2(UPos Y, UPos X) {
+inline UAngle atan2(UPos Y, UPos X) {
 	return UAngle{ std::atan2(Y.value,X.value) };
 }
 
