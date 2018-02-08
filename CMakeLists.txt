@@ -6,5 +6,7 @@ PROJECT(units LANGUAGES CXX)
 add_library(units INTERFACE)
 target_include_directories(units INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
+add_library(MBa::units ALIAS units)
+
 
 
