@@ -70,6 +70,7 @@ struct Unit<0, 0, 0> {
 inline namespace default_unit_definitions {
 using UNone = Unit<0, 0, 0>;
 using UTime = Unit<0, 0, 1>;
+using UHerz = Unit<0, 0, -1>;
 using UMass = Unit<1, 0, 0>;
 using USpeed = Unit<0, 1, -1>;
 using UPos = Unit<0, 1, 0>;
@@ -84,6 +85,7 @@ constexpr USpeed operator""_mps(long double t) { return USpeed((double)t); };
 constexpr UPos operator""_m(long double t) { return UPos((double)t); };
 constexpr UForce operator""_n(long double t) { return UForce((double)t); };
 constexpr UAccel operator""_mps2(long double t) { return UAccel((double)t); };
+constexpr UHerz operator""_hz(long double t) { return UHerz((double)t); };
 }
 
 }
