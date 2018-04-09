@@ -215,6 +215,20 @@ struct UAngle {
 	constexpr explicit UAngle(double v) :value(v) {};
 	constexpr explicit UAngle(Unit<0, 0, 0> v) :value(v.value) {};
 	constexpr operator Unit<0, 0, 0>() const { return value; }
+
+	UAngle& operator+=(UAngle other) {
+		value += other.value;
+		return *this;
+	}
+	UAngle& operator-=(UAngle other) {
+		value += other.value; return *this;
+	}
+	UAngle& operator*=(UAngle other) {
+		value *= other.value; return *this;
+	}
+	UAngle& operator/=(UAngle other) {
+		value /= other.value; return *this;
+	}
 };
 
 constexpr UAngle pi = static_cast<UAngle>((double)_detail_angle::pi_internal);
