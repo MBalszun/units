@@ -74,8 +74,9 @@ using UHerz = Unit<0, 0, -1>;
 using UMass = Unit<1, 0, 0>;
 using USpeed = Unit<0, 1, -1>;
 using UPos = Unit<0, 1, 0>;
-using UForce = Unit<1, 1, -2>;
 using UAccel = Unit<0, 1, -2>;
+using UForce = Unit<1, 1, -2>;
+using UTorque = Unit<1, 2, -2>;
 using ::units::UGen;
 
 namespace litterals {
@@ -121,6 +122,7 @@ template<int k, int m, int s>	constexpr auto operator/(double l, Unit<k, m, s> r
 
 //unary operators
 template<int k, int m, int s>	constexpr auto operator-(Unit<k, m, s> l) -> Unit<k, m, s> { return Unit< k, m, s>{ -l.value}; }
+template<int k, int m, int s>	constexpr auto operator+(Unit<k, m, s> l) -> Unit<k, m, s> { return l; }
 
 //relational operators
 template<int k, int m, int s>	constexpr bool operator<(Unit<k, m, s> l, Unit<k, m, s> r) { return{ l.value < r.value }; }
