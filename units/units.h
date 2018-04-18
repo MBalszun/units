@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <type_traits>
 
-
 namespace units {
 
 //For initializing a Unit where you are too lazy to specify the exact type
@@ -28,6 +27,14 @@ struct Unit {
 	}
 	Unit<k, m, s>& operator-=(Unit<k, m, s> other) {
 		value -= other.value;
+		return *this;
+	}
+	Unit<k, m, s>& operator*=(Unit<0, 0, 0> other) {
+		value *= other.value;
+		return *this;
+	}
+	Unit<k, m, s>& operator/=(Unit<0, 0, 0> other) {
+		value /= other.value;
 		return *this;
 	}
 };
