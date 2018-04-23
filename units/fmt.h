@@ -46,7 +46,7 @@ namespace units {
 	}
 
 	std::ostream& operator<<(std::ostream& out, const FormattedAngle u) {
-		out << u;
+		out << u.u;
 		return out;
 	}
 
