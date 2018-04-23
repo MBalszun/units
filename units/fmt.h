@@ -10,8 +10,16 @@ namespace units {
 		Unit<k, m, s> u;
 	};
 
+	struct FormattedAngle {
+		UAngle u;
+	};
+
 	template<int k, int m, int s>
 	FormattedUnit<k, m, s> sformat(Unit<k, m, s> value) {
+		return { value };
+	}
+
+	FormattedAngle sformat(UAngle value) {
 		return { value };
 	}
 
@@ -29,6 +37,16 @@ namespace units {
 	template<int k, int m, int s>
 	std::ostream& operator<<(std::ostream& out, const Unit<k, m, s> u) {
 		out << u.value;
+		return out;
+	}
+
+	std::ostream& operator<<(std::ostream& out, const UAngle u) {
+		out << u.value;
+		return out;
+	}
+
+	std::ostream& operator<<(std::ostream& out, const FormattedAngle u) {
+		out << u;
 		return out;
 	}
 
