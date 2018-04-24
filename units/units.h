@@ -86,6 +86,9 @@ using UForce = Unit<1, 1, -2>;
 using UTorque = Unit<1, 2, -2>;
 using ::units::UGen;
 
+template<class BaseUnit>
+using UPseudoEnergy = decltype( BaseUnit{} * BaseUnit{} * UTime{} );
+
 namespace litterals {
 constexpr UTime operator""_s(long double t) { return UTime((double)t); };
 constexpr UMass operator""_kg(long double t) { return UMass((double)t); };
