@@ -29,12 +29,15 @@ struct Unit {
 		value -= other.value;
 		return *this;
 	}
-	Unit<k, m, s>& operator*=(Unit<0, 0, 0> other) {
-		value *= other.value;
+
+	// we can't specify operator*= and /= in terms of Unit<0, 0, 0>
+	// as specialization for that type follows later
+	Unit<k, m, s>& operator*=(double other) {
+		value *= other;
 		return *this;
 	}
-	Unit<k, m, s>& operator/=(Unit<0, 0, 0> other) {
-		value /= other.value;
+	Unit<k, m, s>& operator/=(double other) {
+		value /= other;
 		return *this;
 	}
 };
