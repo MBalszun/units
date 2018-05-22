@@ -410,11 +410,6 @@ inline UAngle atan2( UPos Y, UPos X )
 	return UAngle{std::atan2( Y.value, X.value )};
 }
 
-// template<int k, int m, int s>constexpr auto operator*(UAngle l, Unit<k, m, s> r) { return l.value*r; }
-// template<int k, int m, int s>constexpr auto operator*(Unit<k, m, s> l, UAngle r) { return l*r.value; }
-//
-// template<int k, int m, int s>constexpr auto operator/(UAngle l, Unit<k, m, s> r) { return l.value / r; }
-// template<int k, int m, int s>constexpr auto operator/(Unit<k, m, s> l, UAngle r) { return l / r.value; }
 } // namespace units
 
 #endif
