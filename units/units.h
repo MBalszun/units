@@ -340,14 +340,14 @@ struct UAngle {
 		value += other.value;
 		return *this;
 	}
-	UAngle& operator*=( UAngle other )
+	UAngle& operator*=( double other )
 	{
-		value *= other.value;
+		value *= other;
 		return *this;
 	}
-	UAngle& operator/=( UAngle other )
+	UAngle& operator/=( double other )
 	{
-		value /= other.value;
+		value /= other;
 		return *this;
 	}
 };
