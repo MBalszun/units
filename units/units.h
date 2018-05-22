@@ -2,9 +2,9 @@
 #define MBA_UTIL_UNITS_H
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <type_traits>
-#include <chrono>
 
 namespace units {
 
@@ -104,7 +104,7 @@ struct Unit<0, 0, 0> {
 inline namespace default_unit_definitions {
 using UNone   = Unit<0, 0, 0>;
 using UMass   = Unit<1, 0, 0>;
-using UPos	  = Unit<0, 1, 0>;
+using UPos    = Unit<0, 1, 0>;
 using UTime   = Unit<0, 0, 1>;
 using UHerz   = Unit<0, 0, -1>;
 using USpeed  = Unit<0, 1, -1>;
@@ -364,66 +364,30 @@ constexpr UAngle normNeg2Pi2Pi( UAngle angle )
 	return UAngle{_detail_angle::normNeg2Pi2Pi( angle.value )};
 }
 
-constexpr auto operator*( UAngle l, double r )
-{
-	return UAngle{l.value * r};
-}
-constexpr auto operator*( double l, UAngle r )
-{
-	return UAngle{l * r.value};
-}
+// clang-format off
+// binary math operators
+constexpr auto operator*( UAngle l, double r ) { return UAngle{l.value * r}; }
+constexpr auto operator*( double l, UAngle r ) { return UAngle{l * r.value}; }
 
-constexpr auto operator/( UAngle l, UAngle r )
-{
-	return l.value / r.value;
-}
-constexpr auto operator/( UAngle l, double r )
-{
-	return UAngle{l.value / r};
-}
-constexpr auto operator/( double l, UAngle r )
-{
-	return UAngle{l / r.value};
-}
+constexpr auto operator/( UAngle l, UAngle r ) { return l.value / r.value;	 }
+constexpr auto operator/( UAngle l, double r ) { return UAngle{l.value / r}; }
+constexpr auto operator/( double l, UAngle r ) { return UAngle{l / r.value}; }
 
-constexpr auto operator+( UAngle l, UAngle r )
-{
-	return UAngle{l.value + r.value};
-}
-constexpr auto operator-( UAngle l, UAngle r )
-{
-	return UAngle{l.value - r.value};
-}
+constexpr auto operator+( UAngle l, UAngle r ){	return UAngle{l.value + r.value}; }
+constexpr auto operator-( UAngle l, UAngle r ){	return UAngle{l.value - r.value}; }
 
-constexpr auto operator-( UAngle l )
-{
-	return UAngle{-l.value};
-}
+// unary math operators
+constexpr auto operator-( UAngle l ){ 	return UAngle{-l.value};}
 
-constexpr bool operator<( UAngle l, UAngle r )
-{
-	return l.value < r.value;
-}
-constexpr bool operator>( UAngle l, UAngle r )
-{
-	return l.value > r.value;
-}
-constexpr bool operator==( UAngle l, UAngle r )
-{
-	return l.value == r.value;
-}
-constexpr bool operator!=( UAngle l, UAngle r )
-{
-	return l.value != r.value;
-}
-constexpr bool operator<=( UAngle l, UAngle r )
-{
-	return l.value <= r.value;
-}
-constexpr bool operator>=( UAngle l, UAngle r )
-{
-	return l.value >= r.value;
-}
+// comparison operators
+constexpr bool operator< ( UAngle l, UAngle r ) { return l.value < r.value;  }
+constexpr bool operator> ( UAngle l, UAngle r ) { return l.value > r.value;	 }
+constexpr bool operator==( UAngle l, UAngle r ) { return l.value == r.value; }
+constexpr bool operator!=( UAngle l, UAngle r ) { return l.value != r.value; }
+constexpr bool operator<=( UAngle l, UAngle r ) { return l.value <= r.value; }
+constexpr bool operator>=( UAngle l, UAngle r )	{ return l.value >= r.value; }
+
+// clang-format on
 
 inline auto abs( UAngle l )
 {
