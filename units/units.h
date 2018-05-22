@@ -377,7 +377,8 @@ constexpr auto operator+( UAngle l, UAngle r ){	return UAngle{l.value + r.value}
 constexpr auto operator-( UAngle l, UAngle r ){	return UAngle{l.value - r.value}; }
 
 // unary math operators
-constexpr auto operator-( UAngle l ){ 	return UAngle{-l.value};}
+constexpr auto operator-( UAngle angle ){ return UAngle{-angle.value}; }
+constexpr auto operator+( UAngle angle ){ return angle; }
 
 // comparison operators
 constexpr bool operator< ( UAngle l, UAngle r ) { return l.value < r.value;  }
