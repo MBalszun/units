@@ -30,12 +30,21 @@ std::ostream& operator<<( std::ostream& out, const FormattedUnit<k, m, s>& u )
 {
 	out << u.u.value << "";
 	// clang-format off
-		if constexpr (k == 1) { out << "kg" << " "; } else if constexpr (k != 0) { out << "kg^" << k << " "; }
-		if constexpr (m == 1) { out << "m"  << " "; } else if constexpr (m != 0) { out << "m^" << m << " "; }
-		if constexpr (s == 1) { out << "s"  << " "; } else if constexpr (s != 0) { out << "s^" << s << " "; }
-	// clang-format on
-	std::cout << "";
-
+	if constexpr( k != 0 ) {
+		out << "kg";
+		if constexpr( k != 1 ) { out << "^" << k; }
+		if constexpr( m != 0 || s != 0 ) {out << "_"; }
+	}
+	if constexpr( m != 0 ) {
+		out << "m";
+		if constexpr( m != 1 ) { out << "^" << m; }
+		if constexpr(           s != 0 ) {out << "_"; }
+	}
+	if constexpr( s != 0 ) {
+		out << "s";
+		if constexpr( s != 1 ) { out << "^" << s; }
+	}
+	//clang-format on
 	return out;
 }
 
