@@ -26,12 +26,12 @@ struct Unit {
 	constexpr explicit Unit( double v )
 		: value( v ){};
 
-	Unit<k, m, s>& operator+=( Unit<k, m, s> other )
+	constexpr Unit<k, m, s>& operator+=( Unit<k, m, s> other )
 	{
 		value += other.value;
 		return *this;
 	}
-	Unit<k, m, s>& operator-=( Unit<k, m, s> other )
+	constexpr Unit<k, m, s>& operator-=( Unit<k, m, s> other )
 	{
 		value -= other.value;
 		return *this;
@@ -39,12 +39,12 @@ struct Unit {
 
 	// we can't specify operator*= and /= in terms of Unit<0, 0, 0>
 	// as specialization for that type follows later
-	Unit<k, m, s>& operator*=( double other )
+	constexpr Unit<k, m, s>& operator*=( double other )
 	{
 		value *= other;
 		return *this;
 	}
-	Unit<k, m, s>& operator/=( double other )
+	constexpr Unit<k, m, s>& operator/=( double other )
 	{
 		value /= other;
 		return *this;
@@ -67,33 +67,33 @@ struct Unit<0, 0, 0> {
 	constexpr Unit( const Unit<0, 0, 0>& other ) = default;
 	operator double() const { return value; }
 
-	Unit<0, 0, 0>& operator=( const Unit<0, 0, 0>& other ) = default;
-	Unit<0, 0, 0>& operator								   =( double other )
+	constexpr Unit<0, 0, 0>& operator=( const Unit<0, 0, 0>& other ) = default;
+	constexpr Unit<0, 0, 0>& operator                                =( double other )
 	{
 		value = other;
 		return *this;
 	}
-	Unit<0, 0, 0>& operator=( UGen other )
+	constexpr Unit<0, 0, 0>& operator=( UGen other )
 	{
 		value = other.value;
 		return *this;
 	}
-	Unit<0, 0, 0>& operator+=( Unit<0, 0, 0> other )
+	constexpr Unit<0, 0, 0>& operator+=( Unit<0, 0, 0> other )
 	{
 		value += other.value;
 		return *this;
 	}
-	Unit<0, 0, 0>& operator-=( Unit<0, 0, 0> other )
+	constexpr Unit<0, 0, 0>& operator-=( Unit<0, 0, 0> other )
 	{
 		value += other.value;
 		return *this;
 	}
-	Unit<0, 0, 0>& operator*=( Unit<0, 0, 0> other )
+	constexpr Unit<0, 0, 0>& operator*=( Unit<0, 0, 0> other )
 	{
 		value *= other.value;
 		return *this;
 	}
-	Unit<0, 0, 0>& operator/=( Unit<0, 0, 0> other )
+	constexpr Unit<0, 0, 0>& operator/=( Unit<0, 0, 0> other )
 	{
 		value /= other.value;
 		return *this;
@@ -273,6 +273,12 @@ constexpr auto sqrt( Unit<k, m, s> l ) -> Unit<( k / 2 ), ( m / 2 ), ( s / 2 )>
 {
 	static_assert( canTakeSqrt( Unit<k, m, s>{} ), "Base units are not a power of 2" );
 	return Unit<( k / 2 ), ( m / 2 ), ( s / 2 )>( std::sqrt( l.value ) );
+}
+
+template<int k, int m, int s>
+constexpr auto square( Unit<k, m, s> l ) -> Unit<( k * 2 ), ( m * 2 ), ( s * 2 )>
+{
+	return Unit<( k * 2 ), ( m * 2 ), ( s * 2 )>(  l.value  * l.value );
 }
 
 template<int k, int m, int s>
