@@ -1,12 +1,11 @@
-#ifndef MBA_UTIL_UNITS_H
-#define MBA_UTIL_UNITS_H
+#pragma once
 
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <type_traits>
 
-namespace units {
+namespace mba::units {
 
 // For initializing a Unit where you are too lazy to specify the exact type
 struct UGen {
@@ -126,7 +125,7 @@ using USpeed  = Unit<0, 1, -1>;
 using UAccel  = Unit<0, 1, -2>;
 using UForce  = Unit<1, 1, -2>;
 using UTorque = Unit<1, 2, -2>;
-using ::units::UGen;
+using ::mba::units::UGen;
 
 template<class BaseUnit>
 using UPseudoEnergy = decltype( BaseUnit{} * BaseUnit{} * UTime{} );
@@ -446,6 +445,4 @@ inline UAngle atan2( UPos Y, UPos X )
 	return UAngle{std::atan2( Y.value, X.value )};
 }
 
-} // namespace units
-
-#endif
+} // namespace mba::units

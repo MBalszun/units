@@ -1,9 +1,10 @@
 #pragma once
 
-#include "./units.h"
+#include "./units.hpp"
+
 #include <iostream>
 
-namespace units {
+namespace mba::units {
 
 template<int k, int m, int s>
 struct FormattedUnit {
