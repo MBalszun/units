@@ -38,7 +38,7 @@ std::ostream& operator<<( std::ostream& out, const FormattedUnit<k, m, s>& u )
 	if constexpr( m != 0 ) {
 		out << "m";
 		if constexpr( m != 1 ) { out << "^" << m; }
-		if constexpr(           s != 0 ) {out << "_"; }
+		if constexpr( s != 0 ) { out << "_"; }
 	}
 	if constexpr( s != 0 ) {
 		out << "s";
