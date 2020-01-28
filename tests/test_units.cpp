@@ -1,11 +1,7 @@
 #include <mba-units/units.hpp>
 
 #include <type_traits>
-#pragma once
 
-#include <chrono>
-#include <cmath>
-#include <type_traits>
 
 using namespace mba;
 namespace {
@@ -226,6 +222,10 @@ constexpr int check_canTakeSqrt()
 [[maybe_unused]] constexpr auto coc4 = check_combination( units::Unit<1, 2, 3>{}, units::UNone{} );
 [[maybe_unused]] constexpr auto coc5 = check_combination( units::UNone{}, units::UNone{} );
 [[maybe_unused]] constexpr auto coc6 = check_combination( units::Unit<1, 2, 3>{}, units::Unit<-1, -2, -3>{} );
+
+//[[maybe_unused]] constexpr auto coc7 = check_division( units::UAngle{}, units::UAngle{} );
+//[[maybe_unused]] constexpr auto coc8 = check_division( double{}, units::UAngle{} );
+//[[maybe_unused]] constexpr auto coc9 = check_division( units::UAngle{}, double{} );
 
 [[maybe_unused]] constexpr auto pc1 = check_litterals();
 

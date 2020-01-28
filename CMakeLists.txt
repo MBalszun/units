@@ -7,5 +7,5 @@ target_include_directories(mba_units INTERFACE include)
 
 add_library(MBa::units ALIAS mba_units)
 
-
+include(CTest)
 add_subdirectory(tests)

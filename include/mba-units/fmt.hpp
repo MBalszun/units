@@ -64,7 +64,7 @@ inline std::ostream& operator<<( std::ostream& out, const UAngle u )
 
 inline std::ostream& operator<<( std::ostream& out, const FormattedAngle u )
 {
-	out << u.u;
+	out << u.u << "rad";
 	return out;
 }
 
