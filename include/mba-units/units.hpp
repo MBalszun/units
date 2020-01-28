@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <type_traits>
@@ -318,13 +317,13 @@ constexpr auto abs( Unit<k, m, s> l )
 template<int k, int m, int s>
 constexpr auto max( Unit<k, m, s> l, Unit<k, m, s> r )
 {
-	return Unit<k, m, s>( std::max( l.value, r.value ) );
+	return Unit<k, m, s>( l.value > r.value ? l.value : r.value );
 }
 
 template<int k, int m, int s>
 constexpr auto min( Unit<k, m, s> l, Unit<k, m, s> r )
 {
-	return Unit<k, m, s>( std::min( l.value, r.value ) );
+	return Unit<k, m, s>( l.value < r.value ? l.value : r.value );
 }
 
 //##### Operator overload for Angle #####
