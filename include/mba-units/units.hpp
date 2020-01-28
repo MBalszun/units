@@ -386,22 +386,25 @@ struct UAngle {
 		: value( v.value ){};
 	constexpr operator Unit<0, 0, 0>() const { return value; }
 
-	UAngle& operator+=( UAngle other )
+	constexpr UAngle& operator+=( UAngle other )
 	{
 		value += other.value;
 		return *this;
 	}
-	UAngle& operator-=( UAngle other )
+
+	constexpr UAngle& operator-=( UAngle other )
 	{
-		value += other.value;
+		value -= other.value;
 		return *this;
 	}
-	UAngle& operator*=( double other )
+
+	constexpr UAngle& operator*=( double other )
 	{
 		value *= other;
 		return *this;
 	}
-	UAngle& operator/=( double other )
+
+	constexpr UAngle& operator/=( double other )
 	{
 		value /= other;
 		return *this;
