@@ -27,13 +27,13 @@ struct Unit {
 	constexpr explicit Unit( double v )
 		: value( v ){};
 
-	constexpr Unit<k, m, s>& operator+=( Unit<k, m, s> other )
+	constexpr Unit& operator+=( Unit other )
 	{
 		value += other.value;
 		return *this;
 	}
 
-	constexpr Unit<k, m, s>& operator-=( Unit<k, m, s> other )
+	constexpr Unit& operator-=( Unit other )
 	{
 		value -= other.value;
 		return *this;
@@ -41,17 +41,32 @@ struct Unit {
 
 	// we can't specify operator*= and /= in terms of Unit<0, 0, 0>
 	// as specialization for that type follows later
-	constexpr Unit<k, m, s>& operator*=( double other )
+	constexpr Unit& operator*=( double other )
 	{
 		value *= other;
 		return *this;
 	}
 
-	constexpr Unit<k, m, s>& operator/=( double other )
+	constexpr Unit& operator/=( double other )
 	{
 		value /= other;
 		return *this;
 	}
+
+	// relational operators
+
+	friend constexpr auto operator+( Unit l, Unit r ) -> Unit { return Unit{l.value + r.value}; }
+	friend constexpr auto operator-( Unit l, Unit r ) -> Unit { return Unit{l.value - r.value}; }
+
+	friend constexpr auto operator-( Unit l ) -> Unit { return Unit{-l.value}; }
+	friend constexpr auto operator+( Unit l ) -> Unit { return l; }
+
+	friend constexpr bool operator<( Unit l, Unit r ) { return {l.value < r.value}; }
+	friend constexpr bool operator>( Unit l, Unit r ) { return {l.value > r.value}; }
+	friend constexpr bool operator==( Unit l, Unit r ) { return {l.value == r.value}; }
+	friend constexpr bool operator!=( Unit l, Unit r ) { return {l.value != r.value}; }
+	friend constexpr bool operator<=( Unit l, Unit r ) { return {l.value <= r.value}; }
+	friend constexpr bool operator>=( Unit l, Unit r ) { return {l.value >= r.value}; }
 };
 
 // Diminsionless type can be implicitly converted to and from plain double
@@ -70,47 +85,60 @@ struct Unit<0, 0, 0> {
 	constexpr Unit( double v )
 		: value( v ){};
 
-	constexpr Unit( const Unit<0, 0, 0>& other ) = default;
+	constexpr Unit( const Unit& other ) = default;
 
 	operator double() const { return value; }
 
-	constexpr Unit<0, 0, 0>& operator=( const Unit<0, 0, 0>& other ) = default;
+	constexpr Unit& operator=( const Unit& other ) = default;
 
-	constexpr Unit<0, 0, 0>& operator=( double other )
+	constexpr Unit& operator=( double other )
 	{
 		value = other;
 		return *this;
 	}
 
-	constexpr Unit<0, 0, 0>& operator=( UGen other )
+	constexpr Unit& operator=( UGen other )
 	{
 		value = other.value;
 		return *this;
 	}
 
-	constexpr Unit<0, 0, 0>& operator+=( Unit<0, 0, 0> other )
+	constexpr Unit& operator+=( Unit other )
 	{
 		value += other.value;
 		return *this;
 	}
 
-	constexpr Unit<0, 0, 0>& operator-=( Unit<0, 0, 0> other )
+	constexpr Unit& operator-=( Unit other )
 	{
 		value -= other.value;
 		return *this;
 	}
 
-	constexpr Unit<0, 0, 0>& operator*=( Unit<0, 0, 0> other )
+	constexpr Unit& operator*=( Unit other )
 	{
 		value *= other.value;
 		return *this;
 	}
 
-	constexpr Unit<0, 0, 0>& operator/=( Unit<0, 0, 0> other )
+	constexpr Unit& operator/=( Unit other )
 	{
 		value /= other.value;
 		return *this;
 	}
+
+	friend constexpr auto operator+( Unit l, Unit r ) -> Unit { return Unit{l.value + r.value}; }
+	friend constexpr auto operator-( Unit l, Unit r ) -> Unit { return Unit{l.value - r.value}; }
+
+	friend constexpr auto operator-( Unit l ) -> Unit { return Unit{-l.value}; }
+	friend constexpr auto operator+( Unit l ) -> Unit { return l; }
+
+	friend constexpr bool operator<( Unit l, Unit r ) { return {l.value < r.value}; }
+	friend constexpr bool operator>( Unit l, Unit r ) { return {l.value > r.value}; }
+	friend constexpr bool operator==( Unit l, Unit r ) { return {l.value == r.value}; }
+	friend constexpr bool operator!=( Unit l, Unit r ) { return {l.value != r.value}; }
+	friend constexpr bool operator<=( Unit l, Unit r ) { return {l.value <= r.value}; }
+	friend constexpr bool operator>=( Unit l, Unit r ) { return {l.value >= r.value}; }
 };
 
 // Convenience definitions
@@ -155,29 +183,18 @@ constexpr UTime from_std_duration( std::chrono::duration<Rep, Period> d )
 //##### Operator overload for Unit #####
 // operators, where the units can be different and the result (may) be another type yet again
 template<int k1, int m1, int s1, int k2, int m2, int s2>
-constexpr Unit<k1 + k2, m1 + m2, s1 + s2> operator*( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r )
+constexpr auto operator*( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r ) -> Unit<k1 + k2, m1 + m2, s1 + s2>
 {
 	return Unit<k1 + k2, m1 + m2, s1 + s2>{l.value * r.value};
 };
 
 template<int k1, int m1, int s1, int k2, int m2, int s2>
-constexpr Unit<k1 - k2, m1 - m2, s1 - s2> operator/( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r )
+constexpr auto operator/( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r ) -> Unit<k1 - k2, m1 - m2, s1 - s2>
 {
 	return Unit<k1 - k2, m1 - m2, s1 - s2>{l.value / r.value};
 };
 
 // operations, where both operators have to be of the same type
-template<int k, int m, int s>
-constexpr auto operator+( Unit<k, m, s> l, Unit<k, m, s> r ) -> Unit<k, m, s>
-{
-	return Unit<k, m, s>{l.value + r.value};
-}
-
-template<int k, int m, int s>
-constexpr auto operator-( Unit<k, m, s> l, Unit<k, m, s> r ) -> Unit<k, m, s>
-{
-	return Unit<k, m, s>{l.value - r.value};
-}
 
 // operations with scalars
 template<int k, int m, int s>
@@ -205,54 +222,6 @@ constexpr auto operator/( double l, Unit<k, m, s> r ) -> Unit<-k, -m, -s>
 }
 
 // unary operators
-template<int k, int m, int s>
-constexpr auto operator-( Unit<k, m, s> l ) -> Unit<k, m, s>
-{
-	return Unit<k, m, s>{-l.value};
-}
-
-template<int k, int m, int s>
-constexpr auto operator+( Unit<k, m, s> l ) -> Unit<k, m, s>
-{
-	return l;
-}
-
-// relational operators
-template<int k, int m, int s>
-constexpr bool operator<( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value < r.value};
-}
-
-template<int k, int m, int s>
-constexpr bool operator>( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value > r.value};
-}
-
-template<int k, int m, int s>
-constexpr bool operator==( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value == r.value};
-}
-
-template<int k, int m, int s>
-constexpr bool operator!=( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value != r.value};
-}
-
-template<int k, int m, int s>
-constexpr bool operator<=( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value <= r.value};
-}
-
-template<int k, int m, int s>
-constexpr bool operator>=( Unit<k, m, s> l, Unit<k, m, s> r )
-{
-	return {l.value >= r.value};
-}
 
 // helper types to get the result of a mathematical operation on units
 namespace _unit_impl {
@@ -279,8 +248,6 @@ template<int k2, int m2, int s2>
 struct UDivide<double, Unit<k2, m2, s2>> {
 	using type = Unit<-k2, -m2, -s2>;
 };
-
-
 
 template<int k1, int m1, int s1, int k2, int m2, int s2>
 struct UMultiply<Unit<k1, m1, s1>, Unit<k2, m2, s2>> {
@@ -409,6 +376,13 @@ struct UAngle {
 		value /= other;
 		return *this;
 	}
+
+	friend constexpr bool operator<( UAngle l, UAngle r ) { return l.value < r.value; }
+	friend constexpr bool operator>( UAngle l, UAngle r ) { return l.value > r.value; }
+	friend constexpr bool operator==( UAngle l, UAngle r ) { return l.value == r.value; }
+	friend constexpr bool operator!=( UAngle l, UAngle r ) { return l.value != r.value; }
+	friend constexpr bool operator<=( UAngle l, UAngle r ) { return l.value <= r.value; }
+	friend constexpr bool operator>=( UAngle l, UAngle r ) { return l.value >= r.value; }
 };
 
 constexpr UAngle pi = static_cast<UAngle>( (double)_detail_angle::pi_internal );
@@ -440,12 +414,7 @@ constexpr auto operator-( UAngle angle ){ return UAngle{-angle.value}; }
 constexpr auto operator+( UAngle angle ){ return angle; }
 
 // comparison operators
-constexpr bool operator< ( UAngle l, UAngle r ) { return l.value < r.value;  }
-constexpr bool operator> ( UAngle l, UAngle r ) { return l.value > r.value;	 }
-constexpr bool operator==( UAngle l, UAngle r ) { return l.value == r.value; }
-constexpr bool operator!=( UAngle l, UAngle r ) { return l.value != r.value; }
-constexpr bool operator<=( UAngle l, UAngle r ) { return l.value <= r.value; }
-constexpr bool operator>=( UAngle l, UAngle r )	{ return l.value >= r.value; }
+
 
 // clang-format on
 

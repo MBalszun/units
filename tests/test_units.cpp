@@ -81,7 +81,7 @@ constexpr void check_add_sub( Ut )
 	constexpr Ut u2{-16.0};
 
 	static_assert( u1 + u2 == -Ut{8.0} );
-	static_assert( u1 - u2 == Ut{24.0} );
+	static_assert( u1 - u2 == +Ut{24.0} );
 }
 
 template<class Ut>
