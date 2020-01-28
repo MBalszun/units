@@ -47,6 +47,44 @@ constexpr void check_assignment( SUt )
 }
 
 template<class Ut>
+constexpr void check_comparisons( Ut )
+{
+	constexpr Ut u1{1.0};
+	constexpr Ut u2{1.1};
+
+	static_assert( u1 < u2 );
+	static_assert( u1 <= u2 );
+	static_assert( !( u1 > u2 ) );
+	static_assert( !( u1 >= u2 ) );
+	static_assert( !( u1 == u2 ) );
+	static_assert( u1 != u2 );
+
+	static_assert( !( u2 < u1 ) );
+	static_assert( !( u2 <= u1 ) );
+	static_assert( u2 > u1 );
+	static_assert( u2 >= u1 );
+	static_assert( !( u2 == u1 ) );
+	static_assert( u2 != u1 );
+
+	static_assert( !( u1 < u1 ) );
+	static_assert( u1 <= u1 );
+	static_assert( !( u1 > u1 ) );
+	static_assert( u1 >= u1 );
+	static_assert( u1 == u1 );
+	static_assert( !( u1 != u1 ) );
+}
+
+template<class Ut>
+constexpr void check_add_sub( Ut )
+{
+	constexpr Ut u1{8.0};
+	constexpr Ut u2{-16.0};
+
+	static_assert( u1 + u2 == -Ut{8.0} );
+	static_assert( u1 - u2 == Ut{24.0} );
+}
+
+template<class Ut>
 constexpr void check_implicit_conversion( Ut )
 {
 	static_assert( std::is_same_v<Ut, units::Unit<0, 0, 0>>
@@ -83,13 +121,10 @@ constexpr auto check_common_ops_for( Ut u )
 	check_assignment<Ut>( u );
 	check_implicit_conversion( u );
 	check_compund_ops( u );
+	check_comparisons( u );
+	check_add_sub( u );
 	return 0;
 }
-
-[[maybe_unused]] constexpr auto gc1 = check_common_ops_for( units::Unit<1, 2, 3>{1.0} );
-[[maybe_unused]] constexpr auto gc2 = check_common_ops_for( units::Unit<1, 2, -3>{1.0} );
-[[maybe_unused]] constexpr auto gc3 = check_common_ops_for( units::Unit<0, 0, 0>{1.0} );
-[[maybe_unused]] constexpr auto gc4 = check_common_ops_for( units::Unit<-1000, 5, 70>{1.0} );
 
 constexpr void check_imlicit_initialization()
 {
@@ -107,7 +142,31 @@ constexpr auto check_dimless_ops()
 	return 1;
 }
 
-[[maybe_unused]] constexpr auto dlc1 = check_dimless_ops();
+template<class U_l, class U_r>
+constexpr void check_multiplication( U_l, U_r )
+{
+	using r_t = units::UMultiply_t<U_l, U_r>;
+
+	static_assert( U_l{2.0} * U_r{-4.0} == r_t{-8.0} );
+	static_assert( U_l{-8.0} * U_r{0.25} == r_t{-2.0} );
+}
+
+template<class U_l, class U_r>
+constexpr void check_division( U_l, U_r )
+{
+	using r_t = units::UDivide_t<U_l, U_r>;
+
+	static_assert( U_l{2.0} / U_r{-4.0} == r_t{-0.5} );
+	static_assert( U_l{-8.0} / U_r{0.25} == r_t{-32.0} );
+}
+
+template<class U_l, class U_r>
+constexpr auto check_combination( U_l l, U_r r )
+{
+	check_multiplication( l, r );
+	check_division( l, r );
+	return 1;
+}
 
 constexpr auto check_litterals()
 {
@@ -122,14 +181,12 @@ constexpr auto check_litterals()
 	return 1;
 }
 
-[[maybe_unused]] constexpr auto pc1 = check_litterals();
-
 /* Helpers */
 constexpr int check_canTakeSqrt()
 {
 	using namespace mba::units::litterals;
 	static_assert( units::canTakeSqrt<0, 0, 0>( {} ) == true );
-	static_assert( units::canTakeSqrt<0, 0, 0>( ) == true );
+	static_assert( units::canTakeSqrt<0, 0, 0>() == true );
 	static_assert( units::canTakeSqrt<1, 2, 2>() == false );
 	static_assert( units::canTakeSqrt<2, 2, 2>() == true );
 	static_assert( units::canTakeSqrt<-2, -2, -2>() == true );
@@ -146,14 +203,31 @@ constexpr int check_canTakeSqrt()
 
 	static_assert( units::canTakeSqrt<5, 5, 5>() == false );
 
-	static_assert( units::canTakeSqrt( 1.25_kg  ) == false );
-	static_assert( units::canTakeSqrt(1.25_kg * 1.25_kg) == true );
+	static_assert( units::canTakeSqrt( 1.25_kg ) == false );
+	static_assert( units::canTakeSqrt( 1.25_kg * 1.25_kg ) == true );
 
 	static_assert( units::canTakeSqrt( 1.0_mps2 ) == false );
 	static_assert( units::canTakeSqrt( 1.0_s * 1.0_hz ) == true );
 
 	return 1;
 }
+
+[[maybe_unused]] constexpr auto gc1 = check_common_ops_for( units::Unit<1, 2, 3>{1.0} );
+[[maybe_unused]] constexpr auto gc2 = check_common_ops_for( units::Unit<1, 2, -3>{1.0} );
+[[maybe_unused]] constexpr auto gc3 = check_common_ops_for( units::Unit<0, 0, 0>{1.0} );
+[[maybe_unused]] constexpr auto gc4 = check_common_ops_for( units::Unit<-1000, 5, 70>{1.0} );
+[[maybe_unused]] constexpr auto gc5 = check_common_ops_for( units::UAngle{1.0} );
+
+[[maybe_unused]] constexpr auto dlc1 = check_dimless_ops();
+
+[[maybe_unused]] constexpr auto coc1 = check_combination( units::Unit<1, 2, 3>{1.0}, 1.0 );
+[[maybe_unused]] constexpr auto coc2 = check_combination( 1.0, units::Unit<1, 2, 3>{1.0} );
+[[maybe_unused]] constexpr auto coc3 = check_combination( units::UNone{}, units::Unit<1, 2, 3>{1.0} );
+[[maybe_unused]] constexpr auto coc4 = check_combination( units::Unit<1, 2, 3>{}, units::UNone{} );
+[[maybe_unused]] constexpr auto coc5 = check_combination( units::UNone{}, units::UNone{} );
+[[maybe_unused]] constexpr auto coc6 = check_combination( units::Unit<1, 2, 3>{}, units::Unit<-1, -2, -3>{} );
+
+[[maybe_unused]] constexpr auto pc1 = check_litterals();
 
 [[maybe_unused]] constexpr auto hc2 = check_canTakeSqrt();
 
@@ -460,4 +534,7 @@ constexpr int check_canTakeSqrt()
 //
 //} // namespace mba::units
 
-int main() {}
+int main()
+{
+	return 0;
+}
