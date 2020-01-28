@@ -288,7 +288,7 @@ using UInverse_t = UDivide_t<UNone, U1>;
 
 // more complex mathematical operations
 template<int k, int m, int s>
-constexpr bool canTakeSqrt( Unit<k, m, s> )
+constexpr bool canTakeSqrt( Unit<k, m, s> = {} )
 {
 	return ( ( k & 0x1 ) == 0 ) && ( ( m & 0x1 ) == 0 ) && ( ( s & 0x1 ) == 0 );
 }
