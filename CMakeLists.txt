@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(units LANGUAGES CXX)
+project(MbaUnits LANGUAGES CXX)
 
-add_library(units INTERFACE)
-target_include_directories(units INTERFACE include)
+add_library(mba_units INTERFACE)
+target_include_directories(mba_units INTERFACE include)
 
-add_library(MBa::units ALIAS units)
+add_library(MBa::units ALIAS mba_units)
+
+
+add_subdirectory(tests)
