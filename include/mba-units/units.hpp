@@ -97,7 +97,7 @@ struct Unit<0, 0, 0> {
 
 	constexpr Unit<0, 0, 0>& operator-=( Unit<0, 0, 0> other )
 	{
-		value += other.value;
+		value -= other.value;
 		return *this;
 	}
 
