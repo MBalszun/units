@@ -1,3 +1,9 @@
+# MBa Units
+
+A small units library supporting intregral powerse of kilogram meter and seconds and - spearate from that - angles in rad
+
+Here is a simple example, of how this can be used
+
 	#include <mba-units/units.hpp>
 	#include <mba-units/fmt.hpp>
 
@@ -30,7 +36,7 @@
 	/**
 	 * Prints:
 	 *
-	 * With an initial speed of 2m_s^-1 and an acceleration of 1m_s^-2 we will travel 10.5m in 3s
+	 * With an initial speed of 2m_s^-1 and an acceleration of1m_s^-2 we will travel 10.5m in 3s
 	 *
 	 */
 
@@ -43,3 +49,4 @@
 		auto strange = acceleration + initial_speed;
 	#endif
 	}
+
