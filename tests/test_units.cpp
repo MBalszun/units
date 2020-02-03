@@ -83,7 +83,7 @@ constexpr void check_add_sub( Ut )
 template<class Ut>
 constexpr void check_implicit_conversion( Ut )
 {
-	static_assert( std::is_same_v<Ut, units::Unit<0, 0, 0>>
+	static_assert( std::is_same_v<Ut, units::UNone>
 					   ? std::is_convertible_v<Ut, double> && std::is_convertible_v<double, Ut>
 					   : !std::is_convertible_v<Ut, double> && !std::is_convertible_v<double, Ut> );
 }
@@ -124,17 +124,17 @@ constexpr auto check_common_ops_for( Ut u )
 
 constexpr void check_imlicit_initialization()
 {
-	constexpr units::Unit<0, 0, 0> unit1 = 5.0;
+	constexpr units::UNone unit1 = 5.0;
 	static_assert( unit1.value == 5.0 );
 
-	static_assert( std::is_convertible_v<units::Unit<0, 0, 0>, double> );
+	static_assert( std::is_convertible_v<units::UNone, double> );
 }
 
 constexpr auto check_dimless_ops()
 {
 	check_imlicit_initialization();
 	check_assignment<units::UNone>( 0.1 );
-	check_assignment<units::UNone>( units::Unit<0, 0, 0>{1.0} );
+	check_assignment<units::UNone>( units::UNone{1.0} );
 	return 1;
 }
 

@@ -2,7 +2,7 @@
 
 #include "./units.hpp"
 
-#include <iostream>
+#include <ostream>
 
 namespace mba::units {
 
