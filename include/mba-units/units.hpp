@@ -51,6 +51,7 @@ struct CommonUnitBase {
 	friend constexpr auto abs( T l ) noexcept { return T( l.value < 0.0 ? -l.value : l.value ); }
 	friend constexpr auto max( T l, T r ) noexcept { return T( l.value > r.value ? l.value : r.value ); }
 	friend constexpr auto min( T l, T r ) noexcept { return T( l.value < r.value ? l.value : r.value ); }
+	friend inline auto    fmod( T l, T r ) noexcept { return T( std::fmod( l.value, r.value ) ); }
 
 	// comparison operators
 	friend constexpr bool operator<( T l, T r ) noexcept { return {l.value < r.value}; }
