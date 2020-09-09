@@ -139,21 +139,23 @@ constexpr auto check_dimless_ops()
 }
 
 template<class U_l, class U_r>
-constexpr void check_multiplication( U_l, U_r )
+constexpr bool check_multiplication( U_l, U_r )
 {
 	using r_t = units::UMultiply_t<U_l, U_r>;
 
 	static_assert( U_l{2.0} * U_r{-4.0} == r_t{-8.0} );
 	static_assert( U_l{-8.0} * U_r{0.25} == r_t{-2.0} );
+	return true;
 }
 
 template<class U_l, class U_r>
-constexpr void check_division( U_l, U_r )
+constexpr bool check_division( U_l, U_r )
 {
 	using r_t = units::UDivide_t<U_l, U_r>;
 
 	static_assert( U_l{2.0} / U_r{-4.0} == r_t{-0.5} );
 	static_assert( U_l{-8.0} / U_r{0.25} == r_t{-32.0} );
+	return true;
 }
 
 template<class U_l, class U_r>
@@ -223,9 +225,11 @@ constexpr int check_canTakeSqrt()
 [[maybe_unused]] constexpr auto coc5 = check_combination( units::UNone{}, units::UNone{} );
 [[maybe_unused]] constexpr auto coc6 = check_combination( units::Unit<1, 2, 3>{}, units::Unit<-1, -2, -3>{} );
 
-//[[maybe_unused]] constexpr auto coc7 = check_division( units::UAngle{}, units::UAngle{} );
-//[[maybe_unused]] constexpr auto coc8 = check_division( double{}, units::UAngle{} );
-//[[maybe_unused]] constexpr auto coc9 = check_division( units::UAngle{}, double{} );
+[[maybe_unused]] constexpr auto coc7 = check_division( units::UAngle{}, units::UAngle{} );
+[[maybe_unused]] constexpr auto coc8 = check_division( units::UAngle{}, double{} );
+[[maybe_unused]] constexpr auto coc9 = check_multiplication( units::UAngle{}, double{} );
+[[maybe_unused]] constexpr auto coc10 = check_multiplication( double{}, units::UAngle{} );
+
 
 [[maybe_unused]] constexpr auto pc1 = check_litterals();
 
@@ -233,70 +237,7 @@ constexpr int check_canTakeSqrt()
 
 } // namespace
 
-// namespace mba::units {
-//
-//
-// template<class Rep, class Period>
-// constexpr UTime from_std_duration( std::chrono::duration<Rep, Period> d )
-//{
-//	using std_float_dur_type = std::chrono::duration<double, std::ratio<1>>;
-//	return UTime{std::chrono::duration_cast<std_float_dur_type>( d ).count()};
-//}
-//
-//} // namespace default_unit_definitions
-//
-////##### Operator overload for Unit #####
-//// operators, where the units can be different and the result (may) be another type yet again
-// template<int k1, int m1, int s1, int k2, int m2, int s2>
-// constexpr Unit<k1 + k2, m1 + m2, s1 + s2> operator*( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r )
-//{
-//	return Unit<k1 + k2, m1 + m2, s1 + s2>{l.value * r.value};
-//};
-//
-// template<int k1, int m1, int s1, int k2, int m2, int s2>
-// constexpr Unit<k1 - k2, m1 - m2, s1 - s2> operator/( Unit<k1, m1, s1> l, Unit<k2, m2, s2> r )
-//{
-//	return Unit<k1 - k2, m1 - m2, s1 - s2>{l.value / r.value};
-//};
-//
-//// operations, where both operators have to be of the same type
-// template<int k, int m, int s>
-// constexpr auto operator+( Unit<k, m, s> l, Unit<k, m, s> r ) -> Unit<k, m, s>
-//{
-//	return Unit<k, m, s>{l.value + r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr auto operator-( Unit<k, m, s> l, Unit<k, m, s> r ) -> Unit<k, m, s>
-//{
-//	return Unit<k, m, s>{l.value - r.value};
-//}
-//
-//// operations with scalars
-// template<int k, int m, int s>
-// constexpr auto operator*( Unit<k, m, s> l, double r ) -> Unit<k, m, s>
-//{
-//	return Unit<k, m, s>{l.value * r};
-//}
-//
-// template<int k, int m, int s>
-// constexpr auto operator*( double l, Unit<k, m, s> r ) -> Unit<k, m, s>
-//{
-//	return Unit<k, m, s>{l * r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr auto operator/( Unit<k, m, s> l, double r ) -> Unit<k, m, s>
-//{
-//	return Unit<k, m, s>{l.value / r};
-//}
-//
-// template<int k, int m, int s>
-// constexpr auto operator/( double l, Unit<k, m, s> r ) -> Unit<-k, -m, -s>
-//{
-//	return Unit<-k, -m, -s>{l / r.value};
-//}
-//
+
 //// unary operators
 // template<int k, int m, int s>
 // constexpr auto operator-( Unit<k, m, s> l ) -> Unit<k, m, s>
@@ -310,85 +251,7 @@ constexpr int check_canTakeSqrt()
 //	return l;
 //}
 //
-//// relational operators
-// template<int k, int m, int s>
-// constexpr bool operator<( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value < r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr bool operator>( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value > r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr bool operator==( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value == r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr bool operator!=( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value != r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr bool operator<=( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value <= r.value};
-//}
-//
-// template<int k, int m, int s>
-// constexpr bool operator>=( Unit<k, m, s> l, Unit<k, m, s> r )
-//{
-//	return {l.value >= r.value};
-//}
-//
-//// helper types to get the result of a mathematical operation on units
-// namespace _unit_impl {
-//
-// template<class U1, class U2>
-// struct UDivide {
-//};
-//
-// template<class U1, class U2>
-// struct UMultiply {
-//};
-//
-// template<int k1, int m1, int s1, int k2, int m2, int s2>
-// struct UDivide<Unit<k1, m1, s1>, Unit<k2, m2, s2>> {
-//	using type = Unit<k1 - k2, m1 - m2, s1 - s2>;
-//};
-//
-// template<int k1, int m1, int s1, int k2, int m2, int s2>
-// struct UMultiply<Unit<k1, m1, s1>, Unit<k2, m2, s2>> {
-//	using type = Unit<k1 + k2, m1 + m2, s1 + s2>;
-//};
-//
-//} // namespace _unit_impl
-//
-// template<class U1, class U2>
-// using UDivide_t = typename _unit_impl::UDivide<U1, U2>::type;
-//
-// template<class U1, class U2>
-// using UMultiply_t = typename _unit_impl::UMultiply<U1, U2>::type;
-//
-// template<class U1>
-// using UInverse_t = UDivide_t<UNone, U1>;
-//
-//// more complex mathematical operations
-//
-//// c++14: constexpr auto sqrt(Unit<k, m, s> l) -> std::enable_if_t < canTakeSqrt(Unit<k, m, s>{}), Unit < (k / 2), (m
-//// / 2), (s / 2) >> ::type{
-// template<int k, int m, int s>
-// constexpr auto sqrt( Unit<k, m, s> l ) -> Unit<( k / 2 ), ( m / 2 ), ( s / 2 )>
-//{
-//	static_assert( canTakeSqrt( Unit<k, m, s>{} ), "Base units are not a power of 2" );
-//	return Unit<( k / 2 ), ( m / 2 ), ( s / 2 )>( std::sqrt( l.value ) );
-//}
+
 //
 // template<int k, int m, int s>
 // constexpr auto square( Unit<k, m, s> l ) -> Unit<( k * 2 ), ( m * 2 ), ( s * 2 )>
@@ -414,65 +277,7 @@ constexpr int check_canTakeSqrt()
 //	return Unit<k, m, s>( l.value < r.value ? l.value : r.value );
 //}
 //
-////##### Operator overload for Angle #####
-//
-// namespace _detail_angle {
-//
-// constexpr long double pi_internal = 3.141592653589793238462643383279502884;
-// constexpr double      pi          = static_cast<double>( pi_internal );
-// constexpr double      pi2         = static_cast<double>( 2 * pi_internal );
-//
-// constexpr auto modulo2Pi( const double& a )
-//{
-//	return a - ( pi2 * static_cast<long long>( a / pi2 ) );
-//}
-//
-// constexpr double normNegPiPi( double angle )
-//{
-//	// TODO: use c++14 constexpr syntax
-//	return angle < -pi ? normNegPiPi( angle + pi2 ) : angle > pi ? normNegPiPi( angle - pi2 ) : angle;
-//}
-// constexpr double normNeg2Pi2Pi( double angle )
-//{
-//	// TODO: use c++14 constexpr syntax
-//	return normNegPiPi( modulo2Pi( angle ) );
-//}
-//
-//} // namespace _detail_angle
-//
-// struct UAngle {
-//	double value;
-//	constexpr UAngle()
-//		: value{}
-//	{
-//	}
-//	constexpr explicit UAngle( double v )
-//		: value( v ){};
-//	constexpr explicit UAngle( Unit<0, 0, 0> v )
-//		: value( v.value ){};
-//	constexpr operator Unit<0, 0, 0>() const { return value; }
-//
-//	UAngle& operator+=( UAngle other )
-//	{
-//		value += other.value;
-//		return *this;
-//	}
-//	UAngle& operator-=( UAngle other )
-//	{
-//		value += other.value;
-//		return *this;
-//	}
-//	UAngle& operator*=( double other )
-//	{
-//		value *= other;
-//		return *this;
-//	}
-//	UAngle& operator/=( double other )
-//	{
-//		value /= other;
-//		return *this;
-//	}
-//};
+
 //
 // constexpr UAngle pi = static_cast<UAngle>( (double)_detail_angle::pi_internal );
 //

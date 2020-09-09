@@ -187,6 +187,16 @@ struct UDivide<double, Unit<k2, m2, s2>> {
 	using type = Unit<-k2, -m2, -s2>;
 };
 
+template<>
+struct UDivide<UAngle, UAngle> {
+	using type = double;
+};
+
+template<>
+struct UDivide<UAngle, double> {
+	using type = UAngle;
+};
+
 template<int k1, int m1, int s1, int k2, int m2, int s2>
 struct UMultiply<Unit<k1, m1, s1>, Unit<k2, m2, s2>> {
 	using type = Unit<k1 + k2, m1 + m2, s1 + s2>;
@@ -200,6 +210,16 @@ struct UMultiply<double, Unit<k2, m2, s2>> {
 template<int k1, int m1, int s1>
 struct UMultiply<Unit<k1, m1, s1>, double> {
 	using type = Unit<k1, m1, s1>;
+};
+
+template<>
+struct UMultiply<UAngle, double> {
+	using type = UAngle;
+};
+
+template<>
+struct UMultiply<double, UAngle> {
+	using type = UAngle;
 };
 
 } // namespace _unit_impl
