@@ -244,7 +244,7 @@ constexpr double      two_pi         = static_cast<double>( 2 * pi_internal );
 
 constexpr double normNegPiPi( double angle ) noexcept
 {
-	if( angle > -pi && angle < pi ) {
+	if( angle >= -pi && angle <= pi ) {
 		return angle;
 	}
 	while( angle > pi ) {
